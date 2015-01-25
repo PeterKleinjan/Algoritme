@@ -1,7 +1,12 @@
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.TreeSet;
+
 /**
  * Created by Peter on 25-1-2015.
  */
 public class Klant {
+    private static TreeSet ids = new TreeSet( ) ;
     private int klantID;
     private String achternaam;
     private String tussenvoegsel;
@@ -12,7 +17,7 @@ public class Klant {
     private String email;
 
     public void Klant(String achternaam, String tussenvoegsel, String voornaam, int leeftijd, char geslacht, String plaats, String email){
-        this.klantID = (achternaam + tussenvoegsel + voornaam + leeftijd + geslacht + plaats + email).hashCode();
+        this.klantID = generateID((achternaam + tussenvoegsel + voornaam + leeftijd + geslacht + plaats + email).hashCode());
         this.achternaam = achternaam;
         this.tussenvoegsel = tussenvoegsel;
         this.voornaam = voornaam;
@@ -20,6 +25,17 @@ public class Klant {
         this.geslacht = geslacht;
         this.plaats = plaats;
         this.email = email;
+    }
+
+    public int generateID(int hashCode){
+        Random randGen = new Random(hashCode);
+        int randomInt = randGen.nextInt((Integer.MAX_VALUE - Integer.MIN_VALUE) + 1) + Integer.MIN_VALUE;
+        while(ids.contains(randomInt)) {
+            randomInt = randGen.nextInt((Integer.MAX_VALUE - Integer.MIN_VALUE) + 1) + Integer.MIN_VALUE;
+        }
+        ids.add(randomInt);
+
+        return randomInt;
     }
 
     public int getKlantID() {

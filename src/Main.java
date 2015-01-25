@@ -1,3 +1,4 @@
+import javax.swing.text.html.parser.Parser;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -10,24 +11,52 @@ public class Main implements Runnable {
     ArrayList bestellingenSpoed = new ArrayList();
     ArrayList bestellingenNormaal = new ArrayList();
     Klant[]klanten = new Klant[1000];
+    Scanner user_input = new Scanner(System.in);
 
     public static void main(String[] args){
         new Main().menu();
     }
 
     public void menu(){
-        Scanner user_input = new Scanner(System.in);
+
         System.out.println("Wat wilt u doen? \n 1) Nieuwe bestelling \n 2) Nieuwe klant \n 4) Printklanten \n" +
-                " 5) Mergesort \n 6) update2");
+                " 5) Mergesort \n 6) Linear search\n 7) update");
         switch(user_input.nextInt()){
             case 1: nieuweBestelling(); break;
             case 2: nieuweKlant(); break;
             case 3: getBestellingStatus(); break;
             case 4: printKlanten(); break;
             case 5: mergeSort(klanten); printKlanten(); break;
-            case 6: run(); break;
+            case 6: linSearch(); break;
+            case 7: updateBestelling(); break;
             default: System.out.println("No valid input found"); menu();
         }
+    }
+
+    private void linSearch(){
+        System.out.println("Voer uw zoekterm in: ");
+        String search = user_input.next();
+
+        for(int i =0; i< klantenSize; i++){
+            boolean hit = false;
+            if(search.equalsIgnoreCase(klanten[i].getAchternaam()))hit = true;
+            if(search.equalsIgnoreCase(klanten[i].getEmail()))hit = true;
+            if(search.equalsIgnoreCase(klanten[i].getPlaats()))hit = true;
+            if(search.equalsIgnoreCase(klanten[i].getTussenvoegsel()))hit = true;
+            if(search.equalsIgnoreCase(klanten[i].getVoornaam()))hit = true;
+            if(search.equalsIgnoreCase(String.valueOf(klanten[i].getGeslacht())))hit = true;
+            if(search.equalsIgnoreCase(String.valueOf(klanten[i].getLeeftijd())))hit = true;
+            if(search.equalsIgnoreCase(String.valueOf(klanten[i].getKlantID())))hit = true;
+            if(hit){
+                Klant klant = (Klant)klanten[i];
+                String print = "--------------------------------------------\n"+klant.getVoornaam() + " " + klant.getTussenvoegsel()+ " "+
+                        klant.getAchternaam()+"\nLeeftijd: "+klant.getLeeftijd()+"\n"+klant.getKlantID()+
+                        "\n--------------------------------------------";
+                System.out.println(print);
+            }
+
+        }
+        returnToMenu();
     }
 
     //Klanten
@@ -37,7 +66,6 @@ public class Main implements Runnable {
     }
 
     private void nieuweKlant(){
-        Scanner user_input = new Scanner(System.in);
 
         String achternaam;
         System.out.println("Achternaam: ");
@@ -126,7 +154,6 @@ public class Main implements Runnable {
 
     //Bestellingen
     private void nieuweBestelling(){
-        Scanner user_input = new Scanner(System.in);
 
         int klantID;
         System.out.println("Klant-ID: ");
@@ -182,7 +209,6 @@ public class Main implements Runnable {
     }
 
     private void getBestellingStatus(){
-        Scanner user_input = new Scanner(System.in);
 
         int ID;
         System.out.println("Bestelling-ID: ");
@@ -231,7 +257,6 @@ public class Main implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("runcall");
         updateBestelling();
     }
 }

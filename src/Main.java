@@ -6,6 +6,7 @@ import java.util.Scanner;
  */
 public class Main implements Runnable {
 
+    private int klantenSize = 0;
     ArrayList bestellingenSpoed = new ArrayList();
     ArrayList bestellingenNormaal = new ArrayList();
     Klant[]klanten = new Klant[1000];
@@ -28,7 +29,7 @@ public class Main implements Runnable {
 
     //Klanten
     private void printKlantTotaal(){
-        System.out.println("Totaal zijn er "+klanten.size()+" klanten opgeslagen");
+        System.out.println("Totaal zijn er "+klanten.length+" klanten opgeslagen");
         returnToMenu();
     }
 
@@ -68,7 +69,8 @@ public class Main implements Runnable {
 
         Klant klant = new Klant();
         klant.Klant(achternaam,tussenvoegsel,voornaam,leeftijd,geslacht,plaats,email);
-        klanten.add(klant);
+        klanten[klantenSize] = klant;
+        klantenSize++;
 
         System.out.println("Klant aangemaakt met id: "+klant.getKlantID());
 

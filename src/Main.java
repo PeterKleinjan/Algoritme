@@ -4,7 +4,7 @@ import java.util.Scanner;
 /**
  * Created by Peter on 25-1-2015.
  */
-public class Main {
+public class Main implements Runnable {
 
     ArrayList bestellingenSpoed = new ArrayList();
     ArrayList bestellingenNormaal = new ArrayList();
@@ -16,11 +16,12 @@ public class Main {
 
     public void menu(){
         Scanner user_input = new Scanner(System.in);
-        System.out.println("Wat wilt u doen? \n 1) Nieuwe bestelling \n 2) Nieuwe klant \n 3) Klanttotaal");
+        System.out.println("Wat wilt u doen? \n 1) Nieuwe bestelling \n 2) Nieuwe klant \n 3) Bestelstatus");
         switch(user_input.nextInt()){
             case 1: nieuweBestelling(); break;
             case 2: nieuweKlant(); break;
-            case 3: printKlantTotaal(); break;
+            case 3: getBestellingStatus(); break;
+            case 4: updateBestelling(); verwijderBestelling(); break;
             default: System.out.println("No valid input found"); menu();
         }
     }
@@ -43,14 +44,45 @@ public class Main {
         if(dadelijkStr.equals("y")||dadelijkStr.equals("Y"))dadelijk = true;
         else dadelijk = false;
 
+        int duur;
+        System.out.println("Duur: ");
+        duur = user_input.nextInt();
+
         Bestelling bestelling = new Bestelling();
-        bestelling.Bestelling(klantID,dadelijk);
+        bestelling.Bestelling(klantID, duur, dadelijk);
 
         if(dadelijk)bestellingenSpoed.add(bestelling);
         else bestellingenNormaal.add(bestelling);
 
         System.out.println("Bestelling aangemaakt met id: "+bestelling.getBestellingID());
 
+        returnToMenu();
+    }
+
+    private void verwijderBestelling(){
+        if(bestellingenNormaal.size()>0){
+            Bestelling normaal = (Bestelling)bestellingenNormaal.get(0);
+            if(normaal.isCompleet())bestellingenNormaal.remove(0);
+        }
+        if(bestellingenSpoed.size()>0){
+            Bestelling spoed = (Bestelling)bestellingenSpoed.get(0);
+            if(spoed.isCompleet())bestellingenSpoed.remove(0);
+        }
+    }
+
+    private void updateBestelling(){
+        if(bestellingenNormaal.size()>0){
+            Bestelling normaal = (Bestelling)bestellingenNormaal.get(0);
+            if(!normaal.isVerwerking())normaal.startVerwerking();
+            if(normaal.getStatusGereed())normaal.eindVerwerking();
+        }
+        if(bestellingenSpoed.size()>0){
+            Bestelling spoed = (Bestelling)bestellingenSpoed.get(0);
+            if(!spoed.isVerwerking())spoed.startVerwerking();
+            if(spoed.getStatusGereed())spoed.eindVerwerking();
+        }
+        boolean test = bestellingenSpoed.size()>0;
+//        System.out.println("Spoed, if controle: "+test+"\nVerwerking?"+((Bestelling)bestellingenSpoed.get(0)).isVerwerking());
         returnToMenu();
     }
 
@@ -106,4 +138,44 @@ public class Main {
         menu();
     }
 
+    private void getBestellingStatus(){
+        Scanner user_input = new Scanner(System.in);
+
+        int ID;
+        System.out.println("Bestelling-ID: ");
+        ID = user_input.nextInt();
+
+        boolean spoed;
+        System.out.println("Spoed (y/n): ");
+        String dadelijkStr = user_input.next();
+        if(dadelijkStr.equals("y")||dadelijkStr.equals("Y"))spoed = true;
+        else spoed = false;
+
+        Bestelling bestelling = getBestellingByID(ID, spoed);
+        if(bestelling!=null){
+            bestelling.printStatus();
+        }else{
+            System.out.println("Bestelling niet gevonden");
+        }
+        returnToMenu();
+    }
+
+    private Bestelling getBestellingByID(int ID, boolean spoed){
+        if(spoed){
+            for (int i = 0; i < bestellingenSpoed.size(); i++) {
+                if(ID == ((Bestelling)bestellingenSpoed.get(i)).getBestellingID())return (Bestelling)bestellingenSpoed.get(i);
+            }
+        }else{
+            for (int i = 0; i < bestellingenNormaal.size(); i++) {
+                if(ID == ((Bestelling)bestellingenNormaal.get(i)).getBestellingID())return (Bestelling)bestellingenNormaal.get(i);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void run() {
+        updateBestelling();
+        verwijderBestelling();
+    }
 }

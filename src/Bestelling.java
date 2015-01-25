@@ -10,28 +10,36 @@ public class Bestelling {
     private int klantID;
     private int bestellingID;
     private boolean verwerking;
-    private Date starttijd;
-    private int duur;
+    private long starttijd;
+    private long duur;
     private boolean compleet;
     private boolean dadelijk;
 
-    public void Bestelling(int klantID, boolean dadelijk ){
+    public void Bestelling(int klantID, int duur, boolean dadelijk ){
         this.klantID = klantID;
         this.bestellingID = generateID();
         this.dadelijk = dadelijk;
+        this.duur = duur;
         this.verwerking = false;
         this.compleet = false;
     }
 
     public void startVerwerking(){
+        System.out.println("Verwerking gestart");
         this.verwerking = true;
-        this.starttijd = new Date();
+        this.starttijd = System.currentTimeMillis();
+    }
+
+    public boolean getStatusGereed(){
+        System.out.println(duur >= System.currentTimeMillis()-starttijd);
+        if (duur >= System.currentTimeMillis()-starttijd){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public void eindVerwerking(){
-
-        //Weet niet zeker of deze goed werkt:
-        this.duur = new Date().compareTo(starttijd);
 
         this.compleet = true;
     }
@@ -49,5 +57,23 @@ public class Bestelling {
 
     public int getBestellingID(){
         return this.bestellingID;
+    }
+
+    public boolean isVerwerking() {
+        return verwerking;
+    }
+
+    public boolean isCompleet() {
+        return compleet;
+    }
+
+    public void printStatus(){
+        if(compleet) {
+            System.out.println("Bestelling is gereed");
+        }else if(verwerking){
+            System.out.println("Bestelling is in verwerking");
+        }else{
+            System.out.println("Bestelling is nog niet opgepakt");
+        }
     }
 }

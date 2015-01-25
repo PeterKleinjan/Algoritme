@@ -29,6 +29,7 @@ public class Main implements Runnable {
             case 5: mergeSort(klanten); printKlanten(); break;
             case 6: linSearch(); break;
             case 7: insertionSort(klanten); printKlanten(); break;
+            case 8: binarySearch(); break;
             default: System.out.println("No valid input found"); menu();
         }
     }
@@ -48,14 +49,19 @@ public class Main implements Runnable {
             if(search.equalsIgnoreCase(String.valueOf(klanten[i].getLeeftijd())))hit = true;
             if(search.equalsIgnoreCase(String.valueOf(klanten[i].getKlantID())))hit = true;
             if(hit){
-                Klant klant = (Klant)klanten[i];
-                String print = "--------------------------------------------\n"+klant.getVoornaam() + " " + klant.getTussenvoegsel()+ " "+
-                        klant.getAchternaam()+"\nLeeftijd: "+klant.getLeeftijd()+"\n"+klant.getKlantID()+
-                        "\n--------------------------------------------";
-                System.out.println(print);
+                printKlant((Klant)klanten[i]);
+
             }
 
         }
+        returnToMenu();
+    }
+
+    private void printKlant(Klant klant){
+        String print = "--------------------------------------------\n"+klant.getVoornaam() + " " + klant.getTussenvoegsel()+ " "+
+                klant.getAchternaam()+"\nLeeftijd: "+klant.getLeeftijd()+"\n"+klant.getKlantID()+
+                "\n--------------------------------------------";
+        System.out.println(print);
         returnToMenu();
     }
 
@@ -71,6 +77,33 @@ public class Main implements Runnable {
             klanten[j] = klant;
         }
 
+    }
+
+    private void binarySearch(){
+        System.out.println("Zoek op achternaam: ");
+        String search = user_input.next();
+
+        int first, last, middle;
+
+        first = 0;
+        last = klantenSize-1;
+        middle = (first+last)/2;
+
+        while(first <= last){
+            if(klanten[middle].getAchternaam().compareTo(search) < 0){
+                first = middle + 1;
+            }else if (klanten[middle].getAchternaam().equals(search)){
+                printKlant(klanten[middle]);
+                break;
+            }
+            else
+                last = middle -1;
+            middle = (first + last)/2;
+        }
+        if ( first > last){
+            System.out.println(search+" is not found!");
+            returnToMenu();
+        }
     }
 
     //Klanten

@@ -29,9 +29,9 @@ public class Klant {
 
     public int generateID(int hashCode){
         Random randGen = new Random(hashCode);
-        int randomInt = randGen.nextInt((Integer.MAX_VALUE - Integer.MIN_VALUE) + 1) + Integer.MIN_VALUE;
+        int randomInt = randGen.nextInt((999999 - 100000) + 1) + 100000;
         while(ids.contains(randomInt)) {
-            randomInt = randGen.nextInt((Integer.MAX_VALUE - Integer.MIN_VALUE) + 1) + Integer.MIN_VALUE;
+            randomInt = randGen.nextInt((999999 - 100000) + 1) + 100000;
         }
         ids.add(randomInt);
 

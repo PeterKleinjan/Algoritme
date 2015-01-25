@@ -1,9 +1,12 @@
 import java.util.Date;
+import java.util.Random;
+import java.util.TreeSet;
 
 /**
  * Created by Peter on 25-1-2015.
  */
 public class Bestelling {
+    private static TreeSet ids = new TreeSet();
     private int klantID;
     private int bestellingID;
     private boolean verwerking;
@@ -12,9 +15,9 @@ public class Bestelling {
     private boolean compleet;
     private boolean dadelijk;
 
-    public void Bestelling(int klantID, int bestellingID, boolean dadelijk ){
+    public void Bestelling(int klantID, boolean dadelijk ){
         this.klantID = klantID;
-        this.bestellingID = bestellingID;
+        this.bestellingID = generateID();
         this.dadelijk = dadelijk;
         this.verwerking = false;
         this.compleet = false;
@@ -31,5 +34,20 @@ public class Bestelling {
         this.duur = new Date().compareTo(starttijd);
 
         this.compleet = true;
+    }
+
+    public int generateID(){
+        Random randGen = new Random();
+        int randomInt = randGen.nextInt((999999 - 100000) + 1) + 100000;
+        while(ids.contains(randomInt)) {
+            randomInt = randGen.nextInt((999999 - 100000) + 1) + 100000;
+        }
+        ids.add(randomInt);
+
+        return randomInt;
+    }
+
+    public int getBestellingID(){
+        return this.bestellingID;
     }
 }

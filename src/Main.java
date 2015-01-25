@@ -20,7 +20,7 @@ public class Main implements Runnable {
     public void menu(){
 
         System.out.println("Wat wilt u doen? \n 1) Nieuwe bestelling \n 2) Nieuwe klant \n 4) Printklanten \n" +
-                " 5) Mergesort \n 6) Linear search\n 7) update");
+                " 5) Mergesort \n 6) Linear search\n 7) Insertion sort");
         switch(user_input.nextInt()){
             case 1: nieuweBestelling(); break;
             case 2: nieuweKlant(); break;
@@ -28,7 +28,7 @@ public class Main implements Runnable {
             case 4: printKlanten(); break;
             case 5: mergeSort(klanten); printKlanten(); break;
             case 6: linSearch(); break;
-            case 7: updateBestelling(); break;
+            case 7: insertionSort(klanten); printKlanten(); break;
             default: System.out.println("No valid input found"); menu();
         }
     }
@@ -57,6 +57,20 @@ public class Main implements Runnable {
 
         }
         returnToMenu();
+    }
+
+    private static void insertionSort(Klant[] klanten){
+        for(int i = 1; i < klantenSize; i++){
+            Klant klant = klanten[i];
+            int j = i;
+
+            while (j > 0 && klanten[i-1].getAchternaam().compareTo(klant.getAchternaam()) > 0){
+                klanten[j] = klanten[j - 1];
+                j--;
+            }
+            klanten[j] = klant;
+        }
+
     }
 
     //Klanten

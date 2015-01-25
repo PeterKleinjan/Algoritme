@@ -11,8 +11,8 @@ public class Klant {
     private String plaats;
     private String email;
 
-    public void Klant(int klantID, String achternaam, String tussenvoegsel, String voornaam, int leeftijd, char geslacht, String plaats, String email){
-        this.klantID = klantID;
+    public void Klant(String achternaam, String tussenvoegsel, String voornaam, int leeftijd, char geslacht, String plaats, String email){
+        this.klantID = (achternaam + tussenvoegsel + voornaam + leeftijd + geslacht + plaats + email).hashCode();
         this.achternaam = achternaam;
         this.tussenvoegsel = tussenvoegsel;
         this.voornaam = voornaam;

@@ -6,7 +6,7 @@ import java.util.Scanner;
  */
 public class Main implements Runnable {
 
-    private int klantenSize = 0;
+    private static int klantenSize = 0;
     ArrayList bestellingenSpoed = new ArrayList();
     ArrayList bestellingenNormaal = new ArrayList();
     Klant[]klanten = new Klant[1000];
@@ -18,13 +18,14 @@ public class Main implements Runnable {
     public void menu(){
         Scanner user_input = new Scanner(System.in);
         System.out.println("Wat wilt u doen? \n 1) Nieuwe bestelling \n 2) Nieuwe klant \n 4) Printklanten \n" +
-                " 5) Update");
+                " 5) Mergesort \n 6) update2");
         switch(user_input.nextInt()){
             case 1: nieuweBestelling(); break;
             case 2: nieuweKlant(); break;
             case 3: getBestellingStatus(); break;
             case 4: printKlanten(); break;
-            case 5: run(); break;
+            case 5: mergeSort(klanten); printKlanten(); break;
+            case 6: run(); break;
             default: System.out.println("No valid input found"); menu();
         }
     }
@@ -83,11 +84,44 @@ public class Main implements Runnable {
         for(int i =0; i < klantenSize; i++){
             Klant klant = (Klant)klanten[i];
             String print = "--------------------------------------------\n"+klant.getVoornaam() + " " + klant.getTussenvoegsel()+ " "+
-                    klant.getAchternaam()+"\n"+klant.getEmail()+"\n"+klant.getKlantID()+
+                    klant.getAchternaam()+"\nLeeftijd: "+klant.getLeeftijd()+"\n"+klant.getKlantID()+
                     "\n--------------------------------------------";
             System.out.println(print);
         }
         returnToMenu();
+    }
+
+    public static Klant[]mergeSort(Klant[]klanten){
+        if(klanten.length <= 1){
+            return klanten;
+        }
+
+        Klant[]first = new Klant[klantenSize/2];
+        Klant[]second = new Klant[klantenSize-first.length];
+        System.arraycopy(klanten, 0, first, 0, first.length);
+        System.arraycopy(klanten, first.length, second, 0, second.length);
+
+        mergeSort(first);
+        mergeSort(second);
+
+        merge(first, second, klanten);
+        return klanten;
+    }
+    private static void merge(Klant[] first, Klant[] second, Klant[] klanten){
+        int iFirst = 0;
+        int iSecond = 0;
+
+        int j = 0;
+
+        while (iFirst < first.length && iSecond < second.length){
+            if(first[iFirst].getLeeftijd() < second[iSecond].getLeeftijd()){
+                klanten[j] = first[iFirst];
+                iFirst++;
+            }else{
+                klanten[j] = second[iSecond];
+                iSecond++;
+            }
+        }
     }
 
     //Bestellingen

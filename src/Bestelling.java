@@ -31,8 +31,7 @@ public class Bestelling {
     }
 
     public boolean getStatusGereed(){
-        System.out.println(duur >= System.currentTimeMillis()-starttijd);
-        if (duur >= System.currentTimeMillis()-starttijd){
+        if (duur <= System.currentTimeMillis()-starttijd){
             return true;
         }else{
             return false;

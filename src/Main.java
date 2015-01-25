@@ -1,5 +1,5 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Scanner;
 /**
  * Created by Peter on 25-1-2015.
@@ -8,7 +8,7 @@ public class Main implements Runnable {
 
     ArrayList bestellingenSpoed = new ArrayList();
     ArrayList bestellingenNormaal = new ArrayList();
-    ArrayList klanten = new ArrayList();
+    Klant[]klanten = new Klant[1000];
 
     public static void main(String[] args){
         new Main().menu();
@@ -21,68 +21,14 @@ public class Main implements Runnable {
             case 1: nieuweBestelling(); break;
             case 2: nieuweKlant(); break;
             case 3: getBestellingStatus(); break;
-            case 4: updateBestelling(); verwijderBestelling(); break;
+            case 4: run(); break;
             default: System.out.println("No valid input found"); menu();
         }
     }
 
+    //Klanten
     private void printKlantTotaal(){
         System.out.println("Totaal zijn er "+klanten.size()+" klanten opgeslagen");
-        returnToMenu();
-    }
-
-    private void nieuweBestelling(){
-        Scanner user_input = new Scanner(System.in);
-
-        int klantID;
-        System.out.println("Klant-ID: ");
-        klantID = user_input.nextInt();
-
-        boolean dadelijk;
-        System.out.println("Dadelijk (y/n): ");
-        String dadelijkStr = user_input.next();
-        if(dadelijkStr.equals("y")||dadelijkStr.equals("Y"))dadelijk = true;
-        else dadelijk = false;
-
-        int duur;
-        System.out.println("Duur: ");
-        duur = user_input.nextInt();
-
-        Bestelling bestelling = new Bestelling();
-        bestelling.Bestelling(klantID, duur, dadelijk);
-
-        if(dadelijk)bestellingenSpoed.add(bestelling);
-        else bestellingenNormaal.add(bestelling);
-
-        System.out.println("Bestelling aangemaakt met id: "+bestelling.getBestellingID());
-
-        returnToMenu();
-    }
-
-    private void verwijderBestelling(){
-        if(bestellingenNormaal.size()>0){
-            Bestelling normaal = (Bestelling)bestellingenNormaal.get(0);
-            if(normaal.isCompleet())bestellingenNormaal.remove(0);
-        }
-        if(bestellingenSpoed.size()>0){
-            Bestelling spoed = (Bestelling)bestellingenSpoed.get(0);
-            if(spoed.isCompleet())bestellingenSpoed.remove(0);
-        }
-    }
-
-    private void updateBestelling(){
-        if(bestellingenNormaal.size()>0){
-            Bestelling normaal = (Bestelling)bestellingenNormaal.get(0);
-            if(!normaal.isVerwerking())normaal.startVerwerking();
-            if(normaal.getStatusGereed())normaal.eindVerwerking();
-        }
-        if(bestellingenSpoed.size()>0){
-            Bestelling spoed = (Bestelling)bestellingenSpoed.get(0);
-            if(!spoed.isVerwerking())spoed.startVerwerking();
-            if(spoed.getStatusGereed())spoed.eindVerwerking();
-        }
-        boolean test = bestellingenSpoed.size()>0;
-//        System.out.println("Spoed, if controle: "+test+"\nVerwerking?"+((Bestelling)bestellingenSpoed.get(0)).isVerwerking());
         returnToMenu();
     }
 
@@ -129,13 +75,61 @@ public class Main implements Runnable {
         returnToMenu();
     }
 
-    private void returnToMenu(){
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    //Bestellingen
+    private void nieuweBestelling(){
+        Scanner user_input = new Scanner(System.in);
+
+        int klantID;
+        System.out.println("Klant-ID: ");
+        klantID = user_input.nextInt();
+
+        boolean dadelijk;
+        System.out.println("Dadelijk (y/n): ");
+        String dadelijkStr = user_input.next();
+        if(dadelijkStr.equals("y")||dadelijkStr.equals("Y"))dadelijk = true;
+        else dadelijk = false;
+
+        int duur;
+        System.out.println("Duur: ");
+        duur = user_input.nextInt();
+
+        Bestelling bestelling = new Bestelling();
+        bestelling.Bestelling(klantID, duur, dadelijk);
+
+        if(dadelijk)bestellingenSpoed.add(bestelling);
+        else bestellingenNormaal.add(bestelling);
+
+        System.out.println("Bestelling aangemaakt met id: "+bestelling.getBestellingID());
+
+        returnToMenu();
+    }
+
+    private void verwijderBestelling(){
+        if(bestellingenNormaal.size()>0){
+            Bestelling normaal = (Bestelling)bestellingenNormaal.get(0);
+            if(normaal.isCompleet())bestellingenNormaal.remove(0);
         }
-        menu();
+        if(bestellingenSpoed.size()>0){
+            Bestelling spoed = (Bestelling)bestellingenSpoed.get(0);
+
+            if(spoed.isCompleet())bestellingenSpoed.remove(0);
+        }
+    }
+
+    private void updateBestelling(){
+        if(bestellingenNormaal.size()>0){
+            Bestelling normaal = (Bestelling)bestellingenNormaal.get(0);
+            if(!normaal.isVerwerking())normaal.startVerwerking();
+            if(normaal.getStatusGereed())normaal.eindVerwerking();
+        }
+        if(bestellingenSpoed.size()>0){
+            Bestelling spoed = (Bestelling)bestellingenSpoed.get(0);
+            if(!spoed.isVerwerking())spoed.startVerwerking();
+            if(spoed.getStatusGereed())spoed.eindVerwerking();
+        }
+        verwijderBestelling();
+
+        returnToMenu();
     }
 
     private void getBestellingStatus(){
@@ -173,9 +167,22 @@ public class Main implements Runnable {
         return null;
     }
 
+
+    //Algemene functies
+    private void returnToMenu(){
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        menu();
+    }
+
+
+
     @Override
     public void run() {
+        System.out.println("runcall");
         updateBestelling();
-        verwijderBestelling();
     }
 }

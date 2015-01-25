@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 /**
@@ -5,6 +6,9 @@ import java.util.Scanner;
  */
 public class Main {
 
+    ArrayList bestellingenSpoed = new ArrayList();
+    ArrayList bestellingenNormaal = new ArrayList();
+    ArrayList klanten = new ArrayList();
 
     public static void main(String[] args){
         new Main().menu();
@@ -12,15 +16,21 @@ public class Main {
 
     public void menu(){
         Scanner user_input = new Scanner(System.in);
-        System.out.println("Wat wilt u doen? \n 1) Nieuwe bestelling \n 2) Nieuwe klant");
+        System.out.println("Wat wilt u doen? \n 1) Nieuwe bestelling \n 2) Nieuwe klant \n 3) Klanttotaal");
         switch(user_input.nextInt()){
             case 1: nieuweBestelling(); break;
             case 2: nieuweKlant(); break;
+            case 3: printKlantTotaal(); break;
             default: System.out.println("No valid input found"); menu();
         }
     }
 
-    public void nieuweBestelling(){
+    private void printKlantTotaal(){
+        System.out.println("Totaal zijn er "+klanten.size()+" klanten opgeslagen");
+        returnToMenu();
+    }
+
+    private void nieuweBestelling(){
         Scanner user_input = new Scanner(System.in);
 
         int klantID;
@@ -36,17 +46,15 @@ public class Main {
         Bestelling bestelling = new Bestelling();
         bestelling.Bestelling(klantID,dadelijk);
 
+        if(dadelijk)bestellingenSpoed.add(bestelling);
+        else bestellingenNormaal.add(bestelling);
+
         System.out.println("Bestelling aangemaakt met id: "+bestelling.getBestellingID());
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        menu();
+        returnToMenu();
     }
 
-    public void nieuweKlant(){
+    private void nieuweKlant(){
         Scanner user_input = new Scanner(System.in);
 
         String achternaam;
@@ -55,7 +63,8 @@ public class Main {
 
         String tussenvoegsel;
         System.out.println("Tussenvoegsel: ");
-        tussenvoegsel = user_input.next();
+        if(!user_input.next().equals("geen"))tussenvoegsel = user_input.next();
+        else tussenvoegsel = "";
 
         String voornaam;
         System.out.println("Voornaam: ");
@@ -81,8 +90,14 @@ public class Main {
 
         Klant klant = new Klant();
         klant.Klant(achternaam,tussenvoegsel,voornaam,leeftijd,geslacht,plaats,email);
+        klanten.add(klant);
+
         System.out.println("Klant aangemaakt met id: "+klant.getKlantID());
 
+        returnToMenu();
+    }
+
+    private void returnToMenu(){
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {

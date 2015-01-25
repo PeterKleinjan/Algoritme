@@ -17,12 +17,14 @@ public class Main implements Runnable {
 
     public void menu(){
         Scanner user_input = new Scanner(System.in);
-        System.out.println("Wat wilt u doen? \n 1) Nieuwe bestelling \n 2) Nieuwe klant \n 3) Bestelstatus");
+        System.out.println("Wat wilt u doen? \n 1) Nieuwe bestelling \n 2) Nieuwe klant \n 4) Printklanten \n" +
+                " 5) Update");
         switch(user_input.nextInt()){
             case 1: nieuweBestelling(); break;
             case 2: nieuweKlant(); break;
             case 3: getBestellingStatus(); break;
-            case 4: run(); break;
+            case 4: printKlanten(); break;
+            case 5: run(); break;
             default: System.out.println("No valid input found"); menu();
         }
     }
@@ -74,6 +76,17 @@ public class Main implements Runnable {
 
         System.out.println("Klant aangemaakt met id: "+klant.getKlantID());
 
+        returnToMenu();
+    }
+
+    private void printKlanten(){
+        for(int i =0; i < klantenSize; i++){
+            Klant klant = (Klant)klanten[i];
+            String print = "--------------------------------------------\n"+klant.getVoornaam() + " " + klant.getTussenvoegsel()+ " "+
+                    klant.getAchternaam()+"\n"+klant.getEmail()+"\n"+klant.getKlantID()+
+                    "\n--------------------------------------------";
+            System.out.println(print);
+        }
         returnToMenu();
     }
 

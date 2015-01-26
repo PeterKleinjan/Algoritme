@@ -7,6 +7,8 @@ import java.util.Scanner;
  */
 public class Main implements Runnable {
 
+    Node root;
+
     private static int klantenSize = 0;
     ArrayList bestellingenSpoed = new ArrayList();
     ArrayList bestellingenNormaal = new ArrayList();
@@ -20,7 +22,7 @@ public class Main implements Runnable {
     public void menu(){
 
         System.out.println("Wat wilt u doen? \n 1) Nieuwe bestelling \n 2) Nieuwe klant \n 4) Printklanten \n" +
-                " 5) Mergesort \n 6) Linear search\n 7) Insertion sort");
+                " 5) Mergesort \n 6) Linear search\n 7) Insertion sort\n 8) Binary search\n 9) In order traversal\n 10) Verwijder klant");
         switch(user_input.nextInt()){
             case 1: nieuweBestelling(); break;
             case 2: nieuweKlant(); break;
@@ -30,6 +32,8 @@ public class Main implements Runnable {
             case 6: linSearch(); break;
             case 7: insertionSort(klanten); printKlanten(); break;
             case 8: binarySearch(); break;
+            case 9: inOrderTraverseTree(root); returnToMenu();break;
+            case 10: removeInBoth(); break;
             default: System.out.println("No valid input found"); menu();
         }
     }
@@ -120,8 +124,8 @@ public class Main implements Runnable {
 
         String tussenvoegsel;
         System.out.println("Tussenvoegsel: ");
-        if(!user_input.next().equals("geen"))tussenvoegsel = user_input.next();
-        else tussenvoegsel = "";
+        if(user_input.next().equals("geen"))tussenvoegsel = "";
+        else tussenvoegsel = user_input.next();
 
         String voornaam;
         System.out.println("Voornaam: ");
@@ -129,7 +133,10 @@ public class Main implements Runnable {
 
         int leeftijd;
         System.out.println("Leeftijd: ");
-        leeftijd = user_input.nextInt();
+        if(user_input.next().matches("/d*"))
+            leeftijd = user_input.nextInt();
+        else leeftijd = 25;
+
 
         char geslacht;
         System.out.println("Geslacht (m/v): ");
@@ -152,16 +159,21 @@ public class Main implements Runnable {
 
         System.out.println("Klant aangemaakt met id: "+klant.getKlantID());
 
+        //Add node to binary-tree
+        addNode(klant.getKlantID(),klant);
+
         returnToMenu();
     }
 
     private void printKlanten(){
         for(int i =0; i < klantenSize; i++){
             Klant klant = (Klant)klanten[i];
-            String print = "--------------------------------------------\n"+klant.getVoornaam() + " " + klant.getTussenvoegsel()+ " "+
-                    klant.getAchternaam()+"\nLeeftijd: "+klant.getLeeftijd()+"\n"+klant.getKlantID()+
-                    "\n--------------------------------------------";
-            System.out.println(print);
+            if(klant != null) {
+                String print = "--------------------------------------------\n" + klant.getVoornaam() + " " + klant.getTussenvoegsel() + " " +
+                        klant.getAchternaam() + "\nLeeftijd: " + klant.getLeeftijd() + "\n" + klant.getKlantID() +
+                        "\n--------------------------------------------";
+                System.out.println(print);
+            }
         }
         returnToMenu();
     }
@@ -305,5 +317,208 @@ public class Main implements Runnable {
     @Override
     public void run() {
         updateBestelling();
+    }
+
+
+    //Binary tree
+
+
+    public void addNode(int key, Klant klant){
+
+        Node newNode = new Node(key,klant);
+
+        //Als de tree nog leeg is, zet deze node als root
+        if(root == null){
+            root = newNode;
+        }else{
+
+            Node focusNode = root;
+
+            Node parent;
+
+            while(true){
+                parent = focusNode;
+                if(key < focusNode.key){
+                    focusNode = focusNode.leftChild;
+                    if(focusNode == null){
+                        parent.leftChild = newNode;
+                        return;
+                    }
+                }else{
+                    focusNode = focusNode.rightChild;
+                    if(focusNode == null){
+                        parent.rightChild = newNode;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    //in-order traversal
+    public void inOrderTraverseTree(Node focusNode){
+
+        if(focusNode != null){
+
+            inOrderTraverseTree(focusNode.leftChild);
+
+            printKlant(focusNode.klant);
+           // System.out.println(focusNode.key+" naam: "+focusNode.klant.getAchternaam());
+
+            inOrderTraverseTree(focusNode.rightChild);
+        }
+
+    }
+
+    //find node
+    public Node findNode(int key){
+
+        Node focusNode = root;
+
+        while(focusNode.key != key){
+            if (key < focusNode.key){
+
+                focusNode = focusNode.leftChild;
+
+            }else{
+                focusNode = focusNode.rightChild;
+            }
+            if(focusNode == null)
+                return null;
+
+        }
+
+        return focusNode;
+    }
+
+    private void removeInBoth(){
+        int key;
+        System.out.println("Voer de klant-ID in om te verwijderen: ");
+        key = user_input.nextInt();
+
+        removeFromArray(key);
+        remove(key);
+        returnToMenu();
+    }
+
+
+    //delete node
+    public boolean remove(int key){
+
+
+
+        Node focusNode = root;
+        Node parent = root;
+
+        boolean isItALeftChild = true;
+
+        while(focusNode.key != key){
+
+            parent = focusNode;
+
+            if(key < focusNode.key){
+
+                isItALeftChild = true;
+
+                focusNode = focusNode.leftChild;
+
+            }else{
+
+                isItALeftChild = false;
+
+                focusNode= focusNode.rightChild;
+            }
+
+            if(focusNode == null){
+                return false;
+            }
+        }
+
+        if(focusNode.leftChild == null && focusNode.rightChild == null){
+            if(focusNode == root){
+                root = null;
+            }else if(isItALeftChild){
+                parent.leftChild = null;
+            }else{
+                parent.rightChild =null;
+            }
+        }else if(focusNode.rightChild == null){
+
+            if(focusNode == root){
+                root = focusNode.leftChild;
+            }else if(isItALeftChild){
+                parent.leftChild = focusNode.leftChild;
+            }else parent.rightChild = focusNode.leftChild;
+        }
+        else if (focusNode.leftChild == null){
+
+            if(focusNode == root){
+                root = focusNode.rightChild;
+            }else if(isItALeftChild) {
+                parent.leftChild = focusNode.rightChild;
+            }else
+                parent.rightChild = focusNode.leftChild;
+        }
+        else{
+            Node replacement = getReplacementNode(focusNode);
+
+            if(focusNode == root){
+                root = replacement;
+            }else if(isItALeftChild)
+                parent.leftChild = replacement;
+            else
+                parent.rightChild = replacement;
+
+            replacement.leftChild = focusNode.leftChild;
+        }
+        return true;
+    }
+
+public Node getReplacementNode(Node replaceNode){
+
+    Node replacementParent = replaceNode;
+    Node replacement = replaceNode;
+
+    Node focusNode = replaceNode.rightChild;
+
+    while(focusNode != null){
+        replacementParent = replacement;
+        replacement = focusNode;
+        focusNode = focusNode.leftChild;
+    }
+    if(replacement != replacement.rightChild){
+        replacementParent.leftChild = replacement.rightChild;
+        replacement.rightChild = replaceNode.rightChild;
+    }
+    return replacement;
+}
+
+
+private void removeFromArray(int key){
+    for(int i = 0; i < klantenSize; i++){
+        if(klanten[i].getKlantID() == key)klanten[i]=null;
+    }
+    //returnToMenu();
+}
+
+
+
+
+}
+class Node{
+
+    int key;
+    Klant klant;
+
+    Node leftChild;
+    Node rightChild;
+
+    Node(int key, Klant klant){
+        this.key = key;
+        this.klant = klant;
+    }
+
+    public Klant getKlant(){
+        return klant;
     }
 }

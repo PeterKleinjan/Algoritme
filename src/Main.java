@@ -205,7 +205,6 @@ public class Main implements Runnable {
         }
         returnToMenu();
     }
-
     //Mergesort van de klanten op leeftijd
     public static Klant[]mergeSort(Klant[]klanten){
 
@@ -229,7 +228,6 @@ public class Main implements Runnable {
         return klanten;
     }
     private static void merge(Klant[] first, Klant[] second, Klant[] klanten){
-
         //Volgende object om naar te kijken in eerste en tweede helft
         int iFirst = 0;
         int iSecond = 0;
@@ -246,10 +244,10 @@ public class Main implements Runnable {
                 //Anders de tweede waarde
                 klanten[j] = second[iSecond];
                 iSecond++;
-            }
-            j++;
+            }j++;
         }
     }
+
 
     //Nieuwe bestelling
     private void nieuweBestelling(){
@@ -617,3 +615,4 @@ class Node{
         return klant;
     }
 }
+

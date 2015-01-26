@@ -133,9 +133,8 @@ public class Main implements Runnable {
 
         int leeftijd;
         System.out.println("Leeftijd: ");
-        if(user_input.next().matches("/d*"))
-            leeftijd = user_input.nextInt();
-        else leeftijd = 25;
+        leeftijd = user_input.nextInt();
+
 
 
         char geslacht;

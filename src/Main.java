@@ -32,7 +32,7 @@ public class Main implements Runnable {
     public void menu(){
 
         System.out.println("Wat wilt u doen? \n 1) Nieuwe bestelling \n 2) Nieuwe klant \n 4) Printklanten \n" +
-                " 5) Mergesort \n 6) Linear search\n 7) Insertion sort\n 8) Binary search\n 9) In order traversal\n 10) Verwijder klant");
+                " 5) Mergesort \n 6) Linear search\n 7) Insertion sort\n 77) Insertion sort backwards\n 8) Binary search\n 9) In order traversal\n 10) Verwijder klant");
         switch(user_input.nextInt()){
             case 1: nieuweBestelling(); break;
             case 2: nieuweKlant(); break;
@@ -41,6 +41,7 @@ public class Main implements Runnable {
             case 5: mergeSort(klanten); printKlanten(); break;
             case 6: linSearch(); break;
             case 7: insertionSort(klanten); printKlanten(); break;
+            case 77: insertionSortBWD(klanten); printKlanten(); break;
             case 8: binarySearch(); break;
             case 9: inOrderTraverseTree(root); returnToMenu();break;
             case 10: removeInBoth(); break;
@@ -93,6 +94,22 @@ public class Main implements Runnable {
     //Sorteer op achternaam met insertionsort
     private static void insertionSort(Klant[] klanten){
         for(int i = 1; i < klantenSize; i++){
+            Klant klant = klanten[i];
+            int j = i;
+
+            //Vergelijk de achternamen van opeenvolgende klanten en zet dit per duo op volgorde
+            while (j > 0 && compareInsertion(klanten[i-1],klant)){
+                klanten[j] = klanten[j - 1];
+                j--;
+            }
+            klanten[j] = klant;
+        }
+
+    }
+
+    //Sorteer op achternaam met insertionsort
+    private static void insertionSortBWD(Klant[] klanten){
+        for(int i = klantenSize-1; i > 0; i--){
             Klant klant = klanten[i];
             int j = i;
 

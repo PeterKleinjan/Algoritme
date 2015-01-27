@@ -44,6 +44,7 @@ public class Main implements Runnable {
             case 8: binarySearch(); break;
             case 9: inOrderTraverseTree(root); returnToMenu();break;
             case 10: removeInBoth(); break;
+            case 11: updateBestelling(); break;
             default: System.out.println("No valid input found"); menu();
         }
     }
@@ -66,9 +67,13 @@ public class Main implements Runnable {
             if(search.equalsIgnoreCase(String.valueOf(klanten[i].getLeeftijd())))hit = true;
             if(search.equalsIgnoreCase(String.valueOf(klanten[i].getKlantID())))hit = true;
             if(hit){
-                //Als er iets gevonden is wat overeen komt: print
-                printKlant((Klant)klanten[i]);
 
+                //Als er iets gevonden is wat overeen komt: print
+                String print = "--------------------------------------------\n"+((Klant) klanten[i]).getVoornaam() + " " + ((Klant) klanten[i]).getTussenvoegsel()+ " "+
+                        ((Klant) klanten[i]).getAchternaam()+"\nLeeftijd: "+((Klant) klanten[i]).getLeeftijd()+"\n"+((Klant) klanten[i]).getKlantID()+
+                        "\n--------------------------------------------";
+                System.out.println(print);
+                
             }
 
         }

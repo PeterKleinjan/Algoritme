@@ -73,7 +73,7 @@ public class Main implements Runnable {
                         ((Klant) klanten[i]).getAchternaam()+"\nLeeftijd: "+((Klant) klanten[i]).getLeeftijd()+"\n"+((Klant) klanten[i]).getKlantID()+
                         "\n--------------------------------------------";
                 System.out.println(print);
-                
+
             }
 
         }
@@ -97,13 +97,17 @@ public class Main implements Runnable {
             int j = i;
 
             //Vergelijk de achternamen van opeenvolgende klanten en zet dit per duo op volgorde
-            while (j > 0 && klanten[i-1].getAchternaam().compareTo(klant.getAchternaam()) > 0){
+            while (j > 0 && compareInsertion(klanten[i-1],klant)){
                 klanten[j] = klanten[j - 1];
                 j--;
             }
             klanten[j] = klant;
         }
 
+    }
+
+    private static boolean compareInsertion(Klant A, Klant B){
+        return A.getAchternaam().compareTo(B.getAchternaam()) < 0;
     }
 
     //Binary search op achternaam

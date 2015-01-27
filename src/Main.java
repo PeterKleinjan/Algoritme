@@ -246,7 +246,7 @@ public class Main implements Runnable {
 
         while (iFirst < first.length && iSecond < second.length){
             //Als de eerste leeftijd minder is dan de tweede, sla dan de eerste waarde op
-            if(first[iFirst].getLeeftijd() < second[iSecond].getLeeftijd()){
+            if(compareMerge(first[iFirst], second[iSecond])){
                 klanten[j] = first[iFirst];
                 iFirst++;
             }else{
@@ -255,6 +255,10 @@ public class Main implements Runnable {
                 iSecond++;
             }j++;
         }
+    }
+
+    private static boolean compareMerge(Klant A, Klant B){
+        return A.getLeeftijd() < B.getLeeftijd();
     }
 
 

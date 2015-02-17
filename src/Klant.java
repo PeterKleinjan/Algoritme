@@ -21,8 +21,9 @@ public class Klant {
     private String plaats;
     private String email;
 
+
     //Klant CONSTRUCTOR
-    public void Klant(String achternaam, String tussenvoegsel, String voornaam, int leeftijd, char geslacht, String plaats, String email){
+    public Klant(String achternaam, String tussenvoegsel, String voornaam, int leeftijd, char geslacht, String plaats, String email){
         this.klantID = generateID((achternaam + tussenvoegsel + voornaam + leeftijd + geslacht + plaats + email).hashCode());
         this.achternaam = achternaam;
         this.tussenvoegsel = tussenvoegsel;

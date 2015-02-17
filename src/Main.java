@@ -205,8 +205,7 @@ public class Main implements Runnable {
         email = user_input.next();
 
         //Maakt een nieuwe klant aan met de opgegeven gegevens
-        Klant klant = new Klant();
-        klant.Klant(achternaam,tussenvoegsel,voornaam,leeftijd,geslacht,plaats,email);
+        Klant klant = new Klant(achternaam,tussenvoegsel,voornaam,leeftijd,geslacht,plaats,email);
         klanten[klantenSize] = klant;
         klantenSize++;
 
@@ -451,7 +450,7 @@ public class Main implements Runnable {
             inOrderTraverseTree(focusNode.leftChild);
 
             //Print huidige klant
-            printKlant(focusNode.klant);
+            System.out.println(focusNode.klant.getAchternaam());
 
             //ga naar recht
             inOrderTraverseTree(focusNode.rightChild);
